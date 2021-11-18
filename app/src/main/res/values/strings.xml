@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">TEST_COMPOSE</string>
+
+    <string name="show_less">Show less</string>
+    <string name="show_more">Show more</string>
+<!--    <string name="Some_text">In this step, you\'ll apply what you already know and learn new concepts with only a few hints. You will create this</string>-->
+    <string name="Москва">Москва</string>
+</resources>

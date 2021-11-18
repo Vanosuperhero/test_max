@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/news_graph"
+    app:startDestination="@id/newsFragment">
+    <fragment
+        android:id="@+id/newsFragment"
+        android:name="com.example.test_compose.presentation.ui.news.NewsFragment"
+        android:label="NewsFragment" >
+        <action
+            android:id="@+id/action_newsFragment_to_cardFragment"
+            app:destination="@id/cardFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cardFragment"
+        android:name="com.example.test_compose.presentation.ui.card.CardFragment"
+        android:label="CardFragment" >
+        <action
+            android:id="@+id/action_cardFragment_to_newsFragment"
+            app:destination="@id/newsFragment" />
+        <action
+            android:id="@+id/action_cardFragment_to_galleryFragment"
+            app:destination="@id/galleryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/galleryFragment"
+        android:name="com.example.test_compose.presentation.ui.gallery.GalleryFragment"
+        android:label="GalleryFragment" >
+        <action
+            android:id="@+id/action_galleryFragment_to_cardFragment"
+            app:destination="@id/cardFragment" />
+    </fragment>
+</navigation>
