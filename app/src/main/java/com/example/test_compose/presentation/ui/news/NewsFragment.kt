@@ -2,6 +2,7 @@ package com.example.test_compose.presentation.ui.news
 
 import android.media.Image
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +25,7 @@ import androidx.compose.material.Card
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -41,16 +43,30 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.fragment.findNavController
 import com.example.test_compose.R
 import com.example.test_compose.SampleData
 
 import com.example.test_compose.ui.theme.ComposeTutorialTheme
-import com.example.test_compose.view_model.NewsViewModel
-import java.nio.file.Files.size
 
+import com.example.test_compose.view_model.PropertyMapper
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import java.nio.file.Files.size
+import javax.inject.Inject
+
+//@ExperimentalComposeUiApi
+//@ExperimentalMaterialApi
+//@ExperimentalCoroutinesApi
+@AndroidEntryPoint
 class NewsFragment : Fragment(){
+
+
+    private val viewModel: NewsViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -58,15 +74,22 @@ class NewsFragment : Fragment(){
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-//                val news = NewsViewModel.property
-//                MyScreen(onNavigate = { findNavController().navigate(R.id.cardFragment) })
+
+                val news = viewModel.news.value
+                for (n in news)
+                    Log.d("taggg","${n.title}")
+
                 ComposeTutorialTheme {
+
                     FirstScreen(onClick = { findNavController().navigate(R.id.cardFragment) })
                 }
+                }
+
+
             }
         }
     }
-}
+
 
 
 //@Preview(showBackground = true,)

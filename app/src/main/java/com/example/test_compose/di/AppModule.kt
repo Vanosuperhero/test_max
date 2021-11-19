@@ -20,9 +20,5 @@ object AppModule {
         return app as BaseApplication
     }
 
-    @Singleton
-    @Provides
-    fun randomString():String{
-        return "str"
-    }
+
 }

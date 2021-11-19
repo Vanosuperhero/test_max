@@ -29,9 +29,5 @@ data class ApiService(
 
 )
 
-val service = Retrofit.Builder()
-    .baseUrl("https://gnews.io/api/v4/")
-    .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
-    .build()
-    .create(RetrofitService::class.java)
+
 

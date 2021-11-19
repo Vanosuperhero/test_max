@@ -1,8 +1,7 @@
 package com.example.test_compose.view_model
 
-import android.util.Property
 import com.example.test_compose.network.ApiServiceMapper
-import com.google.gson.annotations.SerializedName
+import com.example.test_compose.network.SearchResponse
 
 class PropertyMapper :ApiServiceMapper<ApiService, NewsProperty>{
     override fun mapFromService(service: ApiService): NewsProperty {

@@ -63,14 +63,13 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity: AppCompatActivity() {
 
-    @Inject
-    lateinit var rand: String
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Log.d("tagg",rand)
+
 
         val window = this.window
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
