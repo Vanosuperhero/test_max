@@ -15,6 +15,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -29,6 +30,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
@@ -51,6 +53,9 @@ import com.example.test_compose.R
 import com.example.test_compose.SampleData
 
 import com.example.test_compose.ui.theme.ComposeTutorialTheme
+import com.example.test_compose.utils.BROKEN_IMAGE
+import com.example.test_compose.utils.loadPicture
+import com.example.test_compose.view_model.NewsProperty
 
 import com.example.test_compose.view_model.PropertyMapper
 import dagger.hilt.android.AndroidEntryPoint
@@ -76,12 +81,21 @@ class NewsFragment : Fragment(){
             setContent {
 
                 val news = viewModel.news.value
-                for (n in news)
-                    Log.d("taggg","${n.title}")
+//
 
                 ComposeTutorialTheme {
 
-                    FirstScreen(onClick = { findNavController().navigate(R.id.cardFragment) })
+//                    ListOfNews(news = news,onClick = { findNavController().navigate(R.id.cardFragment) })
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(24.dp)){
+                        itemsIndexed(
+                            items = news
+                        ){ index, NewsProperty ->
+                            NewsCard(news = NewsProperty, onClick = { findNavController().navigate(R.id.cardFragment) })
+                        }
+                    }
                 }
                 }
 
@@ -93,8 +107,8 @@ class NewsFragment : Fragment(){
 
 
 //@Preview(showBackground = true,)
-@Composable
-fun FirstScreen(onClick: () -> Unit){
+//@Composable
+//fun FirstScreen(onClick: () -> Unit, text: String){
 //    val allScreens = RallyScreen.values().toList()
 //    var currentScreen by rememberSaveable { mutableStateOf(RallyScreen.Overview) }
 //    val navController = rememberNavController()
@@ -110,38 +124,41 @@ fun FirstScreen(onClick: () -> Unit){
 //    }
 
 
-    ListOfNews(
-        text = "Hey, take a look at Jetpack Compose, it's great! It's the Android's modern toolkit for building native UI. It simplifies and accelerates UI development on Android Less code, powerful tools, and intuitive Kotlin APIs :)",
-        painter = painterResource(id = R.drawable._7b98f6s_960),
-        onClick = onClick
-    )
-}
+//    ListOfNews(
+//        text = "Hey, take a look at Jetpack Compose, it's great! It's the Android's modern toolkit for building native UI. It simplifies and accelerates UI development on Android Less code, powerful tools, and intuitive Kotlin APIs :)",
+//        painter = painterResource(id = R.drawable._7b98f6s_960),
+//        onClick = onClick
+//    )
+//}
 
 //@Composable
 //fun MyScreen(onNavigate: (Int) -> ()) {
 //    Button(onClick = { onNavigate(R.id.cardFragment) }) { Text(text = "toCardFragment") }
 //}
 
-@Composable
-fun ListOfNews(
-    painter: Painter,
-    text: String,
-    onClick: () -> Unit,
-){
-    LazyColumn(modifier = Modifier
-        .fillMaxWidth()
-        .padding(24.dp)){
-        items(SampleData.conversationSample) { item ->
-            NewsCard(painter = painter,text = text,onClick = onClick)
-        }
-    }
-} 
+//@Composable
+//fun ListOfNews(
+////    painter: Painter,
+//    news: NewsProperty,
+//    onClick: () -> Unit,
+//){
+//    LazyColumn(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(24.dp)){
+//        itemsIndexed(
+//        items = news
+//    ){ index, NewsProperty ->
+//            NewsCard(news = news, onClick = onClick)
+//        }
+//    }
+//}
 
 
 @Composable
 fun NewsCard(
-    painter: Painter,
-    text: String,
+//    painter: Painter,
+    news: NewsProperty,
     onClick: () -> Unit
 ){
     Card(
@@ -154,22 +171,31 @@ fun NewsCard(
         elevation = 8.dp,
     ) {
         Column{
-            Image(
-                painter = painter,
-                contentDescription = "NewsImage",
-                modifier = Modifier
-                    .fillMaxWidth(),
+            news.image?.let { url ->
+                val image = loadPicture(url = url, defaultImage = BROKEN_IMAGE).value
+                image?.let { img ->
+                    Image(
+                        bitmap = img.asImageBitmap(),
+                        contentDescription = "NewsImage",
+                        modifier = Modifier
+                            .fillMaxWidth(),
 //                    .preferredHeight(225.dp)
-                contentScale = ContentScale.Crop
+                        contentScale = ContentScale.Crop
+                    )
+                }
+
+            }
+            news.title?.let {
+                Text(
+                    text = it,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentWidth(Alignment.Start)
+                        .padding(6.dp),
+                    style = MaterialTheme.typography.body1,
                 )
-            Text(
-                text,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentWidth(Alignment.Start)
-                    .padding(6.dp),
-                style = MaterialTheme.typography.body1,
-            )
+            }
+
         }
     }
 }
@@ -179,33 +205,35 @@ fun NewsCard(
 
 
 
-@Composable
-fun CityCard(
-    text: String,
-    painter: Painter
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = { /* Ignoring onClick */ }),
-        shape = RoundedCornerShape(10.dp),
-        elevation = 5.dp,
-    ) {
-        Box(){
-            Image(
-                painter = painter,
-                contentDescription = "Moscow",
-                contentScale = ContentScale.FillWidth,
-                modifier = Modifier.fillMaxWidth())
-            Text(
-                text = text,
-                modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .padding(12.dp),
-                style = TextStyle(color = Color.White, fontSize = 30.sp))
-        }
-    }
-}
+//@Composable
+//fun CityCard(
+//    text: String,
+//    painter: Painter
+//) {
+//    Card(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .clickable(onClick = { /* Ignoring onClick */ }),
+//        shape = RoundedCornerShape(10.dp),
+//        elevation = 5.dp,
+//    ) {
+//        Box(){
+//
+//            Image(
+//                painter = painter,
+//                contentDescription = "Moscow",
+//                contentScale = ContentScale.FillWidth,
+//                modifier = Modifier.fillMaxWidth())
+//
+//            Text(
+//                text = text,
+//                modifier = Modifier
+//                    .align(Alignment.BottomStart)
+//                    .padding(12.dp),
+//                style = TextStyle(color = Color.White, fontSize = 30.sp))
+//        }
+//    }
+//}
 
 
 
