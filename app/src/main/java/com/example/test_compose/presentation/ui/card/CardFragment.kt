@@ -7,8 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.ScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -94,7 +99,10 @@ fun ScreenCard(
             .padding(bottom = 12.dp,)
             .fillMaxWidth(),
         elevation = 8.dp) {
-        Column() {
+        val scrollState = rememberScrollState()
+        Column(
+            Modifier.verticalScroll(state = scrollState)
+        ) {
             news.image?.let { url ->
                 val image = loadPicture(url = url, defaultImage = BROKEN_IMAGE).value
                 image?.let { img ->
