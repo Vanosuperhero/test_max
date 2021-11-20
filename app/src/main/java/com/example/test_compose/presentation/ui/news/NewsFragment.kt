@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.fragment.findNavController
 import com.example.test_compose.R
@@ -78,22 +79,28 @@ class NewsFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View {
         return ComposeView(requireContext()).apply {
-            setContent {
 
+            setContent {
                 val news = viewModel.news.value
-//
 
                 ComposeTutorialTheme {
-
 //                    ListOfNews(news = news,onClick = { findNavController().navigate(R.id.cardFragment) })
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(24.dp)){
+                            .padding(24.dp)
+                    ) {
                         itemsIndexed(
                             items = news
                         ){ index, NewsProperty ->
-                            NewsCard(news = NewsProperty, onClick = { findNavController().navigate(R.id.cardFragment) })
+                            NewsCard(
+                                news = NewsProperty,
+                                onClick = {
+                                val bundle = Bundle()
+                                bundle.putInt("newsId", index)
+                                findNavController().navigate(R.id.cardFragment, bundle)
+                                }
+                            )
                         }
                     }
                 }

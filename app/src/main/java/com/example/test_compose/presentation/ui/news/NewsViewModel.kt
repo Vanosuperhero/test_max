@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.test_compose.di.NetworkModule
 import com.example.test_compose.view_model.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Named
@@ -26,10 +27,14 @@ constructor(
 
     val news: MutableState<List<NewsProperty>> = mutableStateOf(listOf())
 
+//    private val _newss = MutableLiveData<List<NewsProperty>>()
+//    val newss : LiveData<List<NewsProperty>>
+//        get() = _newss
 
 
     init {
         viewModelScope.launch {
+
             val result = repository.search(
                 token = "d86b4c1e1b9be65fface7ce353120d73"
             )

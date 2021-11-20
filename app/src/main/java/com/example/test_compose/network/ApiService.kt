@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 data class ApiService(
 
     @SerializedName("title")
-    val title: String? = null,
+    val title: String,
 
 //    @SerializedName("description")
 //    val description: String? = null,
@@ -22,7 +22,7 @@ data class ApiService(
 //    val url: String? = null,
 
     @SerializedName("image")
-    val image: String? = null,
+    val image: String,
 //
 //    @SerializedName("publishedAt")
 //    val publishedAt: String? = null,

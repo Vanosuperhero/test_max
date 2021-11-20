@@ -6,8 +6,8 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class NewsProperty (
-    val title: String? = null,
-    val image: String? = null,
+    val title: String ,
+    val image: String,
 ): Parcelable
 
 //@Parcelize
