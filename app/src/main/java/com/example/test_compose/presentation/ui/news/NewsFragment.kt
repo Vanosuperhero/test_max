@@ -67,6 +67,25 @@ import kotlinx.coroutines.delay
 import java.nio.file.Files.size
 import javax.inject.Inject
 
+
+
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+
+
+
 @AndroidEntryPoint
 class NewsFragment : Fragment(){
 
@@ -83,7 +102,7 @@ class NewsFragment : Fragment(){
             setContent {
                 val news = viewModel.news.value
                 ComposeTutorialTheme {
-                    ListOfNews(news = news, fragment =  findNavController())
+                    ListOfNews(news = news, fragment =  findNavController(), viewModel = viewModel)
 
                 }
             }
@@ -121,59 +140,46 @@ class NewsFragment : Fragment(){
 //}
 
 
+
+
+
+
+
+
 @Composable
 fun ListOfNews(
     news: List<NewsProperty>,
-    fragment: NavController
+    fragment: NavController,
+    viewModel: NewsViewModel
 ){
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(24.dp)
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
+
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(isRefreshing),
+        onRefresh = { viewModel.refresh() },
     ) {
-        itemsIndexed(
-            items = news
-        ){ index, NewsProperty ->
-            NewsCard(
-                news = NewsProperty,
-                onClick = {
-                    val bundle = Bundle()
-                    bundle.putParcelable("newsId", NewsProperty)
-                    fragment.navigate(R.id.cardFragment, bundle)
-                }
-            )
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp)
+        ) {
+            itemsIndexed(
+                items = news
+            ) { index, NewsProperty ->
+                NewsCard(
+                    news = NewsProperty,
+                    onClick = {
+                        val bundle = Bundle()
+                        bundle.putParcelable("newsId", NewsProperty)
+                        fragment.navigate(R.id.cardFragment, bundle)
+                    }
+                )
+            }
         }
     }
 }
 
-
-@Composable
-fun SwipeToRefresh(
-    isRefreshing: Boolean,
-    progressBarColor: Color? = null,
-    pullToRefreshTextColor: Color? = null,
-    refreshSectionBackgroundColor: Color? = null,
-    onRefresh: () -> Unit,
-    content: @Composable () -> Unit
-){val isRefreshing = rememberSaveable { mutableStateOf(false) } //required
-
-    SwipeToRefresh(
-        isRefreshing = isRefreshing.value,
-        onRefresh = {
-            isRefreshing.value = true
-
-            //make a fake network call and when done, update the isRefreshing to false
-
-        },
-        refreshSectionBackgroundColor = MaterialTheme.colors.primary,
-
-        content = {
-            // add your content here, e.g: top app bar and else
-            // checkout the sample project
-        }
-
-    )
-    }
 
 
 
@@ -188,35 +194,35 @@ fun NewsCard(
         modifier = Modifier
             .padding(bottom = 12.dp,)
             .fillMaxWidth()
-            .clickable(onClick = onClick)
-            ,
+            .clickable(onClick = onClick),
         elevation = 8.dp,
     ) {
-        Column{
-            news.image?.let { url ->
-                val image = loadPicture(url = url, defaultImage = BROKEN_IMAGE).value
-                image?.let { img ->
-                    Image(
-                        bitmap = img.asImageBitmap(),
-                        contentDescription = "NewsImage",
-                        modifier = Modifier
-                            .fillMaxWidth(),
-//                    .preferredHeight(225.dp)
-                        contentScale = ContentScale.Crop
-                    )
-                }
+        Column {
 
-            }
-            news.title?.let {
-                Text(
-                    text = it,
+            val image = loadPicture(url = news.image, defaultImage = BROKEN_IMAGE).value
+            image?.let { img ->
+                Log.d("taggImage","$img")
+                Image(
+                    bitmap = img.asImageBitmap(),
+                    contentDescription = "NewsImage",
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentWidth(Alignment.Start)
-                        .padding(6.dp),
-                    style = MaterialTheme.typography.body1,
+                        .fillMaxWidth(),
+//                    .preferredHeight(225.dp)
+                    contentScale = ContentScale.Crop
                 )
             }
+
+
+
+            Text(
+                text = news.title,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentWidth(Alignment.Start)
+                    .padding(6.dp),
+                style = MaterialTheme.typography.body1,
+            )
+
 
         }
     }

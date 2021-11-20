@@ -86,6 +86,7 @@ dependencies {
     implementation "androidx.hilt:hilt-navigation-fragment:1.0.0"
 
 //    implementation "com.github.aakarshrestha:compose-swipe-to-refresh:1.0.7"
+    implementation "com.google.accompanist:accompanist-swiperefresh:0.21.2-beta"
 }
 
 

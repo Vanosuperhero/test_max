@@ -25,13 +25,14 @@ fun loadPicture(
     Glide.with(LocalContext.current)
         .asBitmap()
         .load(url)
-//        .placeholder(R.drawable.loading_animation)
+        .placeholder(R.drawable.loading_animation)
         .error(R.drawable.ic_broken_image)
         .into(object: CustomTarget<Bitmap>(){
             override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                 bitmapState.value = resource
             }
             override fun onLoadCleared(placeholder: Drawable?) {
+
             }
         })
     return bitmapState

@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndStu/TEST_COMPOSE/app/src/main/res/drawable-v24/ic_connection_error.xml" value="0.1" />
         <entry key="..\:/AndStu/TEST_COMPOSE/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.17435897435897435" />
+        <entry key="..\:/AndStu/TEST_COMPOSE/app/src/main/res/drawable-v24/loading_img.xml" value="0.1" />
         <entry key="..\:/AndStu/TEST_COMPOSE/app/src/main/res/drawable/_7b98f6s_960.xml" value="0.17760416666666667" />
         <entry key="..\:/AndStu/TEST_COMPOSE/app/src/main/res/drawable/ic_broken_image.xml" value="0.1" />
         <entry key="..\:/AndStu/TEST_COMPOSE/app/src/main/res/drawable/ic_launcher_background.xml" value="0.17435897435897435" />
