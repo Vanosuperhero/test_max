@@ -45,6 +45,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 import com.example.test_compose.R
 import com.example.test_compose.network.RetrofitService
@@ -53,12 +55,8 @@ import com.google.gson.GsonBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.launch
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Inject
+import kotlinx.coroutines.delay
 
-//import com.example.test_compose.view_model.MyViewModel
 
 @AndroidEntryPoint
 class MainActivity: AppCompatActivity() {
@@ -70,11 +68,10 @@ class MainActivity: AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-
         val window = this.window
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            window.statusBarColor = this.resources.getColor(R.color.white)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.statusBarColor = this.resources.getColor(R.color.white)
 
 //        myViewModel = ViewModelProvider(this)
 //            .get(MyViewModel::class.java)
@@ -92,6 +89,11 @@ class MainActivity: AppCompatActivity() {
 //        }
     }
 }
+
+
+
+
+
 
 
 

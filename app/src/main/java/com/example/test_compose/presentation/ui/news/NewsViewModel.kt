@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.test_compose.di.NetworkModule
 import com.example.test_compose.view_model.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,19 +24,31 @@ constructor(
     private val repository: NewsRepository,
 ): ViewModel(){
 
+    val errore: MutableState<List<NewsProperty>> = mutableStateOf(listOf(NewsProperty(
+        title = "dd",
+        image = "dd",
+        content = "dd")))
 
     val news: MutableState<List<NewsProperty>> = mutableStateOf(listOf())
 
 
     init {
-        viewModelScope.launch {
+        init(repository, news, viewModelScope, errore)
+    }
+}
 
+fun init(repository: NewsRepository, news: MutableState<List<NewsProperty>>, viewModelScope: CoroutineScope, errore:MutableState<List<NewsProperty>>){
+    try {
+        viewModelScope.launch {
             val result = repository.search(
                 token = "d86b4c1e1b9be65fface7ce353120d73"
             )
             news.value = result
-
         }
-    }
-}
+    }catch (e:Exception){
+        Log.d("tagg","catch")
+        news.value = errore.value
 
+    }
+
+}

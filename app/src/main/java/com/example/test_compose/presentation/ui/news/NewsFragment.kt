@@ -41,7 +41,9 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
@@ -61,9 +63,9 @@ import com.example.test_compose.view_model.NewsProperty
 import com.example.test_compose.view_model.PropertyMapper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import java.nio.file.Files.size
 import javax.inject.Inject
-
 
 @AndroidEntryPoint
 class NewsFragment : Fragment(){
@@ -81,7 +83,7 @@ class NewsFragment : Fragment(){
             setContent {
                 val news = viewModel.news.value
                 ComposeTutorialTheme {
-                    ListOfNews(news = news,fragment =  findNavController())
+                    ListOfNews(news = news, fragment =  findNavController())
 
                 }
             }
@@ -89,30 +91,8 @@ class NewsFragment : Fragment(){
     }
 }
 
-@Composable
-fun ListOfNews(
-    news: List<NewsProperty>,
-    fragment: NavController
-){
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(24.dp)
-    ) {
-        itemsIndexed(
-            items = news
-        ){ index, NewsProperty ->
-            NewsCard(
-                news = NewsProperty,
-                onClick = {
-                    val bundle = Bundle()
-                    bundle.putParcelable("newsId", NewsProperty)
-                    fragment.navigate(R.id.cardFragment, bundle)
-                }
-            )
-        }
-    }
-}
+
+
 
 
 //@Preview(showBackground = true,)
@@ -140,28 +120,62 @@ fun ListOfNews(
 //    )
 //}
 
-//@Composable
-//fun MyScreen(onNavigate: (Int) -> ()) {
-//    Button(onClick = { onNavigate(R.id.cardFragment) }) { Text(text = "toCardFragment") }
-//}
 
-//@Composable
-//fun ListOfNews(
-////    painter: Painter,
-//    news: NewsProperty,
-//    onClick: () -> Unit,
-//){
-//    LazyColumn(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(24.dp)){
-//        itemsIndexed(
-//        items = news
-//    ){ index, NewsProperty ->
-//            NewsCard(news = news, onClick = onClick)
-//        }
-//    }
-//}
+@Composable
+fun ListOfNews(
+    news: List<NewsProperty>,
+    fragment: NavController
+){
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(24.dp)
+    ) {
+        itemsIndexed(
+            items = news
+        ){ index, NewsProperty ->
+            NewsCard(
+                news = NewsProperty,
+                onClick = {
+                    val bundle = Bundle()
+                    bundle.putParcelable("newsId", NewsProperty)
+                    fragment.navigate(R.id.cardFragment, bundle)
+                }
+            )
+        }
+    }
+}
+
+
+@Composable
+fun SwipeToRefresh(
+    isRefreshing: Boolean,
+    progressBarColor: Color? = null,
+    pullToRefreshTextColor: Color? = null,
+    refreshSectionBackgroundColor: Color? = null,
+    onRefresh: () -> Unit,
+    content: @Composable () -> Unit
+){val isRefreshing = rememberSaveable { mutableStateOf(false) } //required
+
+    SwipeToRefresh(
+        isRefreshing = isRefreshing.value,
+        onRefresh = {
+            isRefreshing.value = true
+
+            //make a fake network call and when done, update the isRefreshing to false
+
+        },
+        refreshSectionBackgroundColor = MaterialTheme.colors.primary,
+
+        content = {
+            // add your content here, e.g: top app bar and else
+            // checkout the sample project
+        }
+
+    )
+    }
+
+
 
 
 @Composable
@@ -207,8 +221,6 @@ fun NewsCard(
         }
     }
 }
-
-
 
 
 

@@ -88,46 +88,52 @@ fun ScreenCard(
     news: NewsProperty,
     fragment: NavController
 ){
-    Column() {
-        news.image?.let { url ->
-            val image = loadPicture(url = url, defaultImage = BROKEN_IMAGE).value
-            image?.let { img ->
-                Image(
-                    bitmap = img.asImageBitmap(),
-                    contentDescription = "NewsImage",
-                    modifier = Modifier
-                        .fillMaxWidth()
+    Card(
+        shape = MaterialTheme.shapes.small,
+        modifier = Modifier
+            .padding(bottom = 12.dp,)
+            .fillMaxWidth(),
+        elevation = 8.dp) {
+        Column() {
+            news.image?.let { url ->
+                val image = loadPicture(url = url, defaultImage = BROKEN_IMAGE).value
+                image?.let { img ->
+                    Image(
+                        bitmap = img.asImageBitmap(),
+                        contentDescription = "NewsImage",
+                        modifier = Modifier
+                            .fillMaxWidth()
 //                    .preferredHeight(225.dp)
-                        .clickable(onClick = {
-                            val bundle = Bundle()
-                            bundle.putParcelable("newsId", news)
-                            fragment.navigate(R.id.galleryFragment, bundle)
-                        }),
-                    contentScale = ContentScale.Crop
-                )
+                            .clickable(onClick = {
+                                val bundle = Bundle()
+                                bundle.putParcelable("newsId", news)
+                                fragment.navigate(R.id.galleryFragment, bundle)
+                            }),
+                        contentScale = ContentScale.Crop
+                    )
+                }
             }
-        }
-        Text(
-            text = news.title,
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentWidth(Alignment.Start)
-                .padding(15.dp),
-            style = MaterialTheme.typography.h5,
-        )
-        Spacer(modifier = Modifier.padding(vertical = 5.dp))
-        news.content?.let {
             Text(
-                text = it,
+                text = news.title,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentWidth(Alignment.Start)
-                    .padding(12.dp),
-                style = MaterialTheme.typography.subtitle1,
+                    .padding(15.dp),
+                style = MaterialTheme.typography.h5,
             )
+            Spacer(modifier = Modifier.padding(vertical = 5.dp))
+            news.content?.let {
+                Text(
+                    text = it,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentWidth(Alignment.Start)
+                        .padding(12.dp),
+                    style = MaterialTheme.typography.subtitle1,
+                )
+            }
         }
     }
-
 }
 
 
