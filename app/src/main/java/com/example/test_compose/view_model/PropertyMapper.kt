@@ -11,12 +11,6 @@ class PropertyMapper :ApiServiceMapper<ApiService, NewsProperty>{
             content = service.content)
     }
 
-//    override fun mapFromProperty(property: NewsProperty): ApiService {
-//        return ApiService(
-//            title = property.title,
-//            image = property.image,
-//        )
-//    }
 
     fun fromServiceList(initial: List<ApiService>): List<NewsProperty>{
         return initial.map { mapFromService(it) }

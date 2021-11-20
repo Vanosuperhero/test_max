@@ -73,20 +73,6 @@ class MainActivity: AppCompatActivity() {
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.statusBarColor = this.resources.getColor(R.color.white)
 
-//        myViewModel = ViewModelProvider(this)
-//            .get(MyViewModel::class.java)
-
-
-//        supportFragmentManager.beginTransaction()
-//            .replace(R.id.main_nav_host_fragment, GalleryFragment())
-//            .commit()
-
-
-//        setContent {
-//            ComposeTutorialTheme {
-//                FirstScreen()
-//            }
-//        }
     }
 }
 

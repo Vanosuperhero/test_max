@@ -12,20 +12,12 @@ data class ApiService(
     @SerializedName("title")
     val title: String,
 
-//    @SerializedName("description")
-//    val description: String? = null,
-//
     @SerializedName("content")
     val content: String,
-//
-//    @SerializedName("url")
-//    val url: String? = null,
 
     @SerializedName("image")
     val image: String,
-//
-//    @SerializedName("publishedAt")
-//    val publishedAt: String? = null,
+
 
 )
 

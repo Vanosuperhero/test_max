@@ -10,8 +10,3 @@ data class NewsProperty (
     val image: String,
     val content: String
 ): Parcelable
-
-//@Parcelize
-//data class NewsResult (
-//    val result: List<NewsProperty>
-//): Parcelable

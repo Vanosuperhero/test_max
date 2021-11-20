@@ -53,7 +53,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.fragment.findNavController
 import com.example.test_compose.R
-import com.example.test_compose.SampleData
 
 import com.example.test_compose.ui.theme.ComposeTutorialTheme
 import com.example.test_compose.utils.BROKEN_IMAGE
@@ -112,40 +111,6 @@ class NewsFragment : Fragment(){
 
 
 
-
-
-//@Preview(showBackground = true,)
-//@Composable
-//fun FirstScreen(onClick: () -> Unit, text: String){
-//    val allScreens = RallyScreen.values().toList()
-//    var currentScreen by rememberSaveable { mutableStateOf(RallyScreen.Overview) }
-//    val navController = rememberNavController()
-//    Column(modifier = Modifier
-//        .fillMaxWidth()
-//        .padding(24.dp)) {
-//            PhotographerCard(Modifier.padding(horizontal = 0.dp))
-//        CityCard(text = "Москва", painter = painterResource(id = R.drawable._7b98f6s_960))
-//    }
-
-//    Button(onClick = { findNavController.navigate(R.id.cardFragment)}) {
-//        Text(text = "toCardFragment")
-//    }
-
-
-//    ListOfNews(
-//        text = "Hey, take a look at Jetpack Compose, it's great! It's the Android's modern toolkit for building native UI. It simplifies and accelerates UI development on Android Less code, powerful tools, and intuitive Kotlin APIs :)",
-//        painter = painterResource(id = R.drawable._7b98f6s_960),
-//        onClick = onClick
-//    )
-//}
-
-
-
-
-
-
-
-
 @Composable
 fun ListOfNews(
     news: List<NewsProperty>,
@@ -153,12 +118,10 @@ fun ListOfNews(
     viewModel: NewsViewModel
 ){
     val isRefreshing by viewModel.isRefreshing.collectAsState()
-
     SwipeRefresh(
         state = rememberSwipeRefreshState(isRefreshing),
         onRefresh = { viewModel.refresh() },
     ) {
-
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
@@ -198,22 +161,16 @@ fun NewsCard(
         elevation = 8.dp,
     ) {
         Column {
-
             val image = loadPicture(url = news.image, defaultImage = BROKEN_IMAGE).value
             image?.let { img ->
-                Log.d("taggImage","$img")
                 Image(
                     bitmap = img.asImageBitmap(),
                     contentDescription = "NewsImage",
                     modifier = Modifier
                         .fillMaxWidth(),
-//                    .preferredHeight(225.dp)
                     contentScale = ContentScale.Crop
                 )
             }
-
-
-
             Text(
                 text = news.title,
                 modifier = Modifier
@@ -222,86 +179,9 @@ fun NewsCard(
                     .padding(6.dp),
                 style = MaterialTheme.typography.body1,
             )
-
-
         }
     }
 }
 
-
-
-
-//@Composable
-//fun CityCard(
-//    text: String,
-//    painter: Painter
-//) {
-//    Card(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .clickable(onClick = { /* Ignoring onClick */ }),
-//        shape = RoundedCornerShape(10.dp),
-//        elevation = 5.dp,
-//    ) {
-//        Box(){
-//
-//            Image(
-//                painter = painter,
-//                contentDescription = "Moscow",
-//                contentScale = ContentScale.FillWidth,
-//                modifier = Modifier.fillMaxWidth())
-//
-//            Text(
-//                text = text,
-//                modifier = Modifier
-//                    .align(Alignment.BottomStart)
-//                    .padding(12.dp),
-//                style = TextStyle(color = Color.White, fontSize = 30.sp))
-//        }
-//    }
-//}
-
-
-
-//@ExperimentalAnimationApi
-//@Composable
-//fun ComposeCard() {
-//        Card {
-//            var expanded by remember { mutableStateOf(false)}
-//            Column(Modifier.clickable {expanded = !expanded}) {
-//                Image(painterResource(id = R.drawable.kremlin), contentDescription = null)
-//                AnimatedVisibility(expanded) {
-//                    Text(
-//                        text = "Moscow",
-//                        style = MaterialTheme.typography.h2,
-//                    )
-//                }
-//            }
-//        }
-//}
-//
-//@Composable
-//fun PhotographerCard(modifier: Modifier = Modifier) {
-//    Row(
-//        modifier
-//            .padding(8.dp)
-//            .clip(RoundedCornerShape(8.dp))
-//            .background(MaterialTheme.colors.surface)
-//            .clickable(onClick = { /* Ignoring onClick */ })
-//            .padding(16.dp)
-//    ) {
-//        Surface(
-//            modifier = Modifier.size(50.dp),
-////            shape = CircleShape,
-//            color = MaterialTheme.colors.onSurface.copy(alpha = 0.2f)
-//        ) {
-//            Image(painterResource(id = R.drawable.kremlin), contentDescription = null)
-//        }
-//
-//        Text("Moscow", fontWeight = FontWeight.Bold)
-//        Spacer(Modifier.width(30.dp))
-//    }
-//
-//}
 
 

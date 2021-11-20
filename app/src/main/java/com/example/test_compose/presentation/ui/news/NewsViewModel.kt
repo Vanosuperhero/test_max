@@ -37,8 +37,6 @@ constructor(
 
     val news: MutableState<List<NewsProperty>> = mutableStateOf(listOf())
 
-    private var viewModelJob = Job()
-    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     init {
         init()
@@ -69,9 +67,9 @@ constructor(
         get() = _isRefreshing.asStateFlow()
 
     fun refresh() {
-        // This doesn't handle multiple 'refreshing' tasks, don't use this
+
         viewModelScope.launch {
-            // A fake 2 second 'refresh'
+
             _isRefreshing.emit(true)
             delay(2000)
             init()
@@ -79,9 +77,3 @@ constructor(
         }
     }
 }
-
-//repository, news, viewModelScope, errore
-//repository: NewsRepository,
-//news: MutableState<List<NewsProperty>>,
-//viewModelScope: CoroutineScope,
-//errore: MutableState<List<NewsProperty>>
