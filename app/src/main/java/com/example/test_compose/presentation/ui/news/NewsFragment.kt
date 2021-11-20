@@ -64,9 +64,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.nio.file.Files.size
 import javax.inject.Inject
 
-//@ExperimentalComposeUiApi
-//@ExperimentalMaterialApi
-//@ExperimentalCoroutinesApi
+
 @AndroidEntryPoint
 class NewsFragment : Fragment(){
 
@@ -82,35 +80,39 @@ class NewsFragment : Fragment(){
 
             setContent {
                 val news = viewModel.news.value
-
                 ComposeTutorialTheme {
-//                    ListOfNews(news = news,onClick = { findNavController().navigate(R.id.cardFragment) })
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(24.dp)
-                    ) {
-                        itemsIndexed(
-                            items = news
-                        ){ index, NewsProperty ->
-                            NewsCard(
-                                news = NewsProperty,
-                                onClick = {
-                                val bundle = Bundle()
-                                bundle.putInt("newsId", index)
-                                findNavController().navigate(R.id.cardFragment, bundle)
-                                }
-                            )
-                        }
-                    }
-                }
-                }
+                    ListOfNews(news = news,fragment =  findNavController())
 
-
+                }
             }
         }
     }
+}
 
+@Composable
+fun ListOfNews(
+    news: List<NewsProperty>,
+    fragment: NavController
+){
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(24.dp)
+    ) {
+        itemsIndexed(
+            items = news
+        ){ index, NewsProperty ->
+            NewsCard(
+                news = NewsProperty,
+                onClick = {
+                    val bundle = Bundle()
+                    bundle.putParcelable("newsId", NewsProperty)
+                    fragment.navigate(R.id.cardFragment, bundle)
+                }
+            )
+        }
+    }
+}
 
 
 //@Preview(showBackground = true,)
@@ -164,7 +166,6 @@ class NewsFragment : Fragment(){
 
 @Composable
 fun NewsCard(
-//    painter: Painter,
     news: NewsProperty,
     onClick: () -> Unit
 ){

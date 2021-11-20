@@ -21,15 +21,10 @@ class NewsViewModel
 @Inject
 constructor(
     private val repository: NewsRepository,
-//    private @Named("auth_token") val token: String,
 ): ViewModel(){
 
 
     val news: MutableState<List<NewsProperty>> = mutableStateOf(listOf())
-
-//    private val _newss = MutableLiveData<List<NewsProperty>>()
-//    val newss : LiveData<List<NewsProperty>>
-//        get() = _newss
 
 
     init {
@@ -39,7 +34,6 @@ constructor(
                 token = "d86b4c1e1b9be65fface7ce353120d73"
             )
             news.value = result
-//            val getPropertiesDeferred = NetworkModule.provideRetrofitService().getService()
 
         }
     }
