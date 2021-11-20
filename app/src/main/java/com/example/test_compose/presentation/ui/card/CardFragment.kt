@@ -7,10 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -29,6 +27,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import com.example.test_compose.R
 import com.example.test_compose.presentation.ui.news.NewsViewModel
 import com.example.test_compose.ui.theme.ComposeTutorialTheme
@@ -57,10 +57,11 @@ class CardFragment : Fragment(){
 
             arguments?.getParcelable<NewsProperty>("newsId")?.let { nId ->
                 newsId.value = nId
-                if (newsId.value != null ){Log.d("taggg", "newsId")}
+
             }
 
-    }}
+    }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -70,13 +71,10 @@ class CardFragment : Fragment(){
         return ComposeView(requireContext()).apply {
 
 //            CoroutineScope(Main).launch {
-
                 setContent {
-
                     ComposeTutorialTheme {
                         newsId.value?.let { url ->
-                    ScreenCard(news = url, onClick = {})
-
+                    ScreenCard(news = url, fragment = findNavController())
                     }
                 }
             }
@@ -88,42 +86,48 @@ class CardFragment : Fragment(){
 @Composable
 fun ScreenCard(
     news: NewsProperty,
-    onClick: () -> Unit
+    fragment: NavController
 ){
-    Card(
-        shape = MaterialTheme.shapes.small,
-        modifier = Modifier
-            .padding(bottom = 12.dp,)
-            .fillMaxWidth()
-            .clickable(onClick = onClick)
-        ,
-        elevation = 8.dp,
-    ) {
-        Column{
-            news.image?.let { url ->
-                val image = loadPicture(url = url, defaultImage = BROKEN_IMAGE).value
-                image?.let { img ->
-                    Image(
-                        bitmap = img.asImageBitmap(),
-                        contentDescription = "NewsImage",
-                        modifier = Modifier
-                            .fillMaxWidth(),
-//                    .preferredHeight(225.dp)
-                        contentScale = ContentScale.Crop
-                    )
-                }
-
-            }
-            news.title?.let {
-                Text(
-                    text = it,
+    Column() {
+        news.image?.let { url ->
+            val image = loadPicture(url = url, defaultImage = BROKEN_IMAGE).value
+            image?.let { img ->
+                Image(
+                    bitmap = img.asImageBitmap(),
+                    contentDescription = "NewsImage",
                     modifier = Modifier
                         .fillMaxWidth()
-                        .wrapContentWidth(Alignment.Start)
-                        .padding(6.dp),
-                    style = MaterialTheme.typography.body1,
+//                    .preferredHeight(225.dp)
+                        .clickable(onClick = {
+                            val bundle = Bundle()
+                            bundle.putParcelable("newsId", news)
+                            fragment.navigate(R.id.galleryFragment, bundle)
+                        }),
+                    contentScale = ContentScale.Crop
                 )
             }
         }
+        Text(
+            text = news.title,
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentWidth(Alignment.Start)
+                .padding(15.dp),
+            style = MaterialTheme.typography.h5,
+        )
+        Spacer(modifier = Modifier.padding(vertical = 5.dp))
+        news.content?.let {
+            Text(
+                text = it,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentWidth(Alignment.Start)
+                    .padding(12.dp),
+                style = MaterialTheme.typography.subtitle1,
+            )
+        }
     }
+
 }
+
+

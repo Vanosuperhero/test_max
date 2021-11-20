@@ -15,8 +15,8 @@ data class ApiService(
 //    @SerializedName("description")
 //    val description: String? = null,
 //
-//    @SerializedName("content")
-//    val content: String? = null,
+    @SerializedName("content")
+    val content: String,
 //
 //    @SerializedName("url")
 //    val url: String? = null,

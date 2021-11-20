@@ -8,7 +8,7 @@ class PropertyMapper :ApiServiceMapper<ApiService, NewsProperty>{
         return NewsProperty(
             title = service.title,
             image = service.image,
-        )
+            content = service.content)
     }
 
 //    override fun mapFromProperty(property: NewsProperty): ApiService {
