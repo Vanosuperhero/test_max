@@ -118,8 +118,7 @@ fun NewsStatus(fragment: NavController, news: List<NewsProperty>, viewModel: New
             ListOfNews(news = news, fragment =  fragment, viewModel = viewModel)
         }
         MyApiStatus.ERROR -> {
-            ErrorCard(string = viewModel.netError.value, painter = painterResource(id = R.drawable.ic_connection_error))
-
+            ErrorCard(string = viewModel.netError.value, painter = painterResource(id = R.drawable.ic_connection_error), viewModel = viewModel)
         }
     }
 }
@@ -199,34 +198,38 @@ fun NewsCard(
 
 @Composable
 fun ErrorCard(
-    string: String, painter: Painter
-){
-    Card(
-        shape = MaterialTheme.shapes.small,
-        modifier = Modifier
-            .padding(bottom = 12.dp,)
-            .fillMaxWidth(),
-        elevation = 8.dp,
+    string: String, painter: Painter, viewModel: NewsViewModel
+) {
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
+    SwipeRefresh(
+            state = rememberSwipeRefreshState(isRefreshing),
+            onRefresh = { viewModel.refresh() },
     ) {
-        Column{
-            Image(
-                painter = painter,
-                contentDescription = "NewsImage",
+        Card(
+                shape = MaterialTheme.shapes.small,
                 modifier = Modifier
-                    .fillMaxWidth(),
-                contentScale = ContentScale.Crop
-            )
-            Text(
-                text = string,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentWidth(Alignment.Start)
-                    .padding(6.dp),
-                style = MaterialTheme.typography.body1,
-            )
+                        .padding(12.dp)
+                        .fillMaxWidth()
+        ) {
+            Column {
+                Image(
+                        painter = painter,
+                        contentDescription = "NewsImage",
+                        modifier = Modifier
+                                .fillMaxWidth(),
+                        contentScale = ContentScale.Crop
+                )
+                Text(
+                        text = string,
+                        modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentWidth(Alignment.Start)
+                                .padding(6.dp),
+                        style = MaterialTheme.typography.body1,
+                )
+            }
         }
     }
 }
-
 
 

@@ -52,11 +52,9 @@ constructor(
                 _status.value = MyApiStatus.DONE
                 news.value = result
             } catch (e: Exception) {
-
-//                Log.d("tagg", e.localizedMessage)
-                netError.value = e.toString()
+                netError.value = e.localizedMessage?:"Network error"
                 _status.value = MyApiStatus.ERROR
-                Log.d("tagg", "${e.localizedMessage}")
+                Log.d("tagg", e.localizedMessage?:"Network error")
             }
         }
     }
