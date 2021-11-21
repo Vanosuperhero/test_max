@@ -56,7 +56,7 @@ constructor(
 //                Log.d("tagg", e.localizedMessage)
                 netError.value = e.toString()
                 _status.value = MyApiStatus.ERROR
-                Log.d("tagg", "e.localizedMessage")
+                Log.d("tagg", "${e.localizedMessage}")
             }
         }
     }
@@ -69,7 +69,7 @@ constructor(
     fun refresh() {
 
         viewModelScope.launch {
-
+            Log.d("tagg", "refresh")
             _isRefreshing.emit(true)
             delay(2000)
             init()
