@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
@@ -101,14 +102,27 @@ class NewsFragment : Fragment(){
             setContent {
                 val news = viewModel.news.value
                 ComposeTutorialTheme {
-                    ListOfNews(news = news, fragment =  findNavController(), viewModel = viewModel)
-
+                    NewsStatus(news = news, fragment =  findNavController(), viewModel = viewModel,)
                 }
             }
         }
     }
 }
 
+
+@Composable
+fun NewsStatus(fragment: NavController, news: List<NewsProperty>, viewModel: NewsViewModel){
+    when(viewModel.status.value){
+
+        MyApiStatus.DONE -> {
+            ListOfNews(news = news, fragment =  fragment, viewModel = viewModel)
+        }
+        MyApiStatus.ERROR -> {
+            ErrorCard(string = viewModel.netError.value, painter = painterResource(id = R.drawable.ic_connection_error))
+
+        }
+    }
+}
 
 
 @Composable
@@ -173,6 +187,37 @@ fun NewsCard(
             }
             Text(
                 text = news.title,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentWidth(Alignment.Start)
+                    .padding(6.dp),
+                style = MaterialTheme.typography.body1,
+            )
+        }
+    }
+}
+
+@Composable
+fun ErrorCard(
+    string: String, painter: Painter
+){
+    Card(
+        shape = MaterialTheme.shapes.small,
+        modifier = Modifier
+            .padding(bottom = 12.dp,)
+            .fillMaxWidth(),
+        elevation = 8.dp,
+    ) {
+        Column{
+            Image(
+                painter = painter,
+                contentDescription = "NewsImage",
+                modifier = Modifier
+                    .fillMaxWidth(),
+                contentScale = ContentScale.Crop
+            )
+            Text(
+                text = string,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentWidth(Alignment.Start)

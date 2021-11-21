@@ -1,6 +1,8 @@
 package com.example.test_compose.presentation.ui.news
 
 import android.util.Log
+import android.view.View
+import android.widget.ImageView
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
@@ -17,6 +19,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 import javax.inject.Named
 
+enum class MyApiStatus{ERROR,DONE}
 
 @HiltViewModel
 class NewsViewModel
@@ -25,15 +28,12 @@ constructor(
     private val repository: NewsRepository,
 ): ViewModel() {
 
-    val errore: MutableState<List<NewsProperty>> = mutableStateOf(
-        listOf(
-            NewsProperty(
-                title = "Error",
-                image = "",
-                content = ""
-            )
-        )
-    )
+    private val _status = MutableLiveData<MyApiStatus>()
+    val status : LiveData<MyApiStatus>
+        get() = _status
+
+
+    val netError: MutableState<String> = mutableStateOf("")
 
     val news: MutableState<List<NewsProperty>> = mutableStateOf(listOf())
 
@@ -44,25 +44,25 @@ constructor(
 
 
     private fun init() {
-            viewModelScope.launch {
+        viewModelScope.launch {
+            try {
+                val result = repository.search(
+                    token = "d86b4c1e1b9be65fface7ce353120d73"
+                )
+                _status.value = MyApiStatus.DONE
+                news.value = result
+            } catch (e: Exception) {
 
-                try {
-                    val result = repository.search(
-                        token = "d86b4c1e1b9be65fface7ce353120d73"
-                    )
-                    news.value = result
-                } catch (e: Exception) {
-            Log.d("tagg", "catch")
-            news.value = errore.value
-
-        }
-
+//                Log.d("tagg", e.localizedMessage)
+                netError.value = e.toString()
+                _status.value = MyApiStatus.ERROR
+                Log.d("tagg", "e.localizedMessage")
             }
-
-
+        }
     }
-    private val _isRefreshing = MutableStateFlow(false)
 
+
+    private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean>
         get() = _isRefreshing.asStateFlow()
 
@@ -77,3 +77,4 @@ constructor(
         }
     }
 }
+
